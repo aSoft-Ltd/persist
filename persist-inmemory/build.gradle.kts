@@ -16,14 +16,8 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api("org.jetbrains.kotlinx:atomicfu:${vers.kotlinx.atomicfu}")
+                api(project(":persist-core"))
                 api(asoft("paging-core", vers.asoft.paging))
-            }
-        }
-
-        val commonTest by getting {
-            dependencies {
-                api(asoft("test", vers.asoft.test))
             }
         }
     }
@@ -31,5 +25,5 @@ kotlin {
 
 aSoftLibrary(
     version = vers.asoft.persist,
-    description = "Platform agnostic contracts for persisting data"
+    description = "Platform agnostic contracts for persisting data in memomry"
 )
