@@ -1,6 +1,8 @@
 plugins {
     kotlin("jvm")
     id("tz.co.asoft.library")
+    id("io.codearte.nexus-staging")
+    signing
 }
 
 kotlin {
@@ -18,3 +20,8 @@ kotlin {
         }
     }
 }
+
+aSoftLibrary(
+    version = vers.asoft.persist,
+    description = "contracts for persisting data in mongo through the jvm"
+)
