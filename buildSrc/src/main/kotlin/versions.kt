@@ -5,6 +5,7 @@ object vers {
     val mongo = "3.12.7"
 
     object asoft {
+        val test = "1.0.1"
         val builders = "1.1.1"
         val persist = "0.0.1"
         val paging = "0.0.1"

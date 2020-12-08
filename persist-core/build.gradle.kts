@@ -2,6 +2,8 @@ plugins {
     id("com.android.library")
     kotlin("multiplatform")
     id("tz.co.asoft.library")
+    id("io.codearte.nexus-staging")
+    signing
 }
 
 android {
@@ -15,8 +17,19 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api("org.jetbrains.kotlinx:atomicfu:${vers.kotlinx.atomicfu}")
-//                api(project(":paging-core"))
+                api(asoft("paging-core", vers.asoft.paging))
+            }
+        }
+
+        val commonTest by getting {
+            dependencies {
+                api(asoft("test", vers.asoft.test))
             }
         }
     }
 }
+
+aSoftLibrary(
+    version = vers.asoft.persist,
+    description = "Platform agnostic contracts for persisting data"
+)
