@@ -15,7 +15,13 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api("org.jetbrains.kotlinx:atomicfu:${vers.kotlinx.atomicfu}")
-//                api(project(":paging-core"))
+                api(asoft("paging-core", vers.asoft.paging))
+            }
+        }
+
+        val commonTest by getting {
+            dependencies {
+                api(asoft("test", vers.asoft.test))
             }
         }
     }
