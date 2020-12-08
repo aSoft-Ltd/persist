@@ -18,3 +18,4 @@ pluginManagement {
 rootProject.name = "persist"
 
 include(":persist-core")
+include(":persist-local")
