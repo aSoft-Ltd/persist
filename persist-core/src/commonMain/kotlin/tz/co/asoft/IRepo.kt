@@ -1,3 +1,3 @@
 package tz.co.asoft
 
-interface IRepo<T : Entity> : IDao<T>
+interface IRepo<E : Entity> : IDao<E>
