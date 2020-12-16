@@ -1,4 +1,8 @@
-# 0.0.1
+# 0.0.2 : 2020.12.16
+## New Features
+- Added `GenericPagingSource<T>` to `persist-core`
+
+# 0.0.1 : 2020.12.08
 ## Availability
 - Published to maven central
 

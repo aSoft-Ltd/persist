@@ -39,7 +39,7 @@ open class UniqueNameMongoDao<T : NamedEntity>(
             it.getString("name") == t.name && it.getString("uid") != t.uid
         }
 
-        if (!found) throw Exception("Entity with name: ${t.name} already exist in the database")
+        if (found) throw Exception("Entity with name: ${t.name} already exist in the database")
 
         return super.edit(t)
     }
