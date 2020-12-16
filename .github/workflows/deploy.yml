@@ -29,8 +29,17 @@ jobs:
       - name: Making gradlew executable
         run: chmod +x ./gradlew
         working-directory: .
-      - name: publishing artifacts
-        run: ./gradlew publish
+      - name: publishing persit-core
+        run: ./gradlew :persist-core:publish
+        working-directory: .
+      - name: publishing persit-inmemory
+        run: ./gradlew :persist-inmemory:publish
+        working-directory: .
+      - name: publishing persist-local
+        run: ./gradlew :persist-local:publish
+        working-directory: .
+      - name: publishing persist-mongo
+        run: ./gradlew :persist-mongo:publish
         working-directory: .
       - name: Closing and Releasing Repositories
         run: ./gradlew :persist-core:closeAndReleaseRepository

@@ -1,7 +1,9 @@
 package tz.co.asoft
 
 open class InMemoryDao<T : Entity>(private val prefix: String) : IDao<T> {
+
     internal val data = mutableMapOf<String?, T>()
+
     override suspend fun all() = data.values.filterNot { it.deleted }
 
     override suspend fun allDeleted() = data.values.filter { it.deleted }
@@ -28,6 +30,8 @@ open class InMemoryDao<T : Entity>(private val prefix: String) : IDao<T> {
     override suspend fun load(uid: String): T? = data[uid]
 
     override suspend fun load(uids: Collection<String>) = uids.mapNotNull { load(it) }
+
+    override suspend fun page(no: Int, size: Int): List<T> = data.values.chunked(size).getOrNull(no - 1) ?: listOf()
 
     override suspend fun wipe(t: T): T {
         data.remove(t.uid)

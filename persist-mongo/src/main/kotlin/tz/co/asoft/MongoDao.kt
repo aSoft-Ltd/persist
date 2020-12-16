@@ -2,8 +2,10 @@ package tz.co.asoft
 
 import com.mongodb.MongoClient
 import com.mongodb.client.MongoDatabase
+import com.mongodb.client.model.Filters
 import com.mongodb.client.model.Filters.*
 import com.mongodb.client.model.Indexes
+import com.mongodb.client.model.Sorts
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.KSerializer
@@ -74,6 +76,14 @@ open class MongoDao<T : Entity>(
     override suspend fun load(uid: String) = withContext(Dispatchers.IO) {
         val doc = collection.find(eq("uid", uid)).first()
         doc?.to(serializer)
+    }
+
+    override suspend fun page(no: Int, size: Int): List<T> {
+        require(no > 0) { "Page numbering starts from one" }
+        val filters = eq("deleted", false)
+        val sorts = Sorts.ascending("uid")
+        val skips = (no - 1) * size
+        return collection.find(filters).sort(sorts).skip(skips).limit(size).mapNotNull { it.to(serializer) }
     }
 
     override suspend fun all() = withContext(Dispatchers.IO) {
