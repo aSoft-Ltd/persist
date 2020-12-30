@@ -18,7 +18,7 @@ kotlin {
     universalLib()
 }
 
-aSoftLibrary(
+aSoftOSSLibrary(
     version = vers.asoft.persist,
     description = "Platform agnostic contracts for persisting data in a local environment"
 )

@@ -6,7 +6,9 @@ import com.mongodb.client.model.Filters
 import com.mongodb.client.model.Filters.*
 import com.mongodb.client.model.Indexes
 import com.mongodb.client.model.Sorts
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.KSerializer
 import org.bson.types.ObjectId
@@ -16,6 +18,8 @@ open class MongoDao<T : Entity>(
     override val serializer: KSerializer<T>,
     collection: String
 ) : IMongoDao<T> {
+
+    override val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     constructor(
         options: MongoOptions,
@@ -37,9 +41,9 @@ open class MongoDao<T : Entity>(
         createIndex(Indexes.ascending("uid"))
     }
 
-    override suspend fun create(list: Collection<T>) = list.map { create(it) }
+    override fun create(list: Collection<T>) = scope.later { list.map { create(it).await() } }
 
-    override suspend fun create(t: T) = withContext(Dispatchers.IO) {
+    override fun create(t: T) = scope.later {
         val id = ObjectId.get()
         if (t.uid == null) t.uid = id.toHexString()
         val doc = t.toDocument(serializer).apply {
@@ -49,49 +53,51 @@ open class MongoDao<T : Entity>(
         doc.to(serializer)
     }
 
-    override suspend fun edit(list: Collection<T>) = list.map { edit(it) }
+    override fun edit(list: Collection<T>) = scope.later { list.map { edit(it).await() } }
 
-    override suspend fun edit(t: T) = withContext(Dispatchers.IO) {
+    override fun edit(t: T) = scope.later {
         val doc = t.toDocument(serializer)
         collection.replaceOne(eq("uid", t.uid), doc)
         doc.to(serializer)
     }
 
-    override suspend fun delete(list: Collection<T>) = list.map {
-        it.deleted = true
-        edit(it)
+    override fun delete(list: Collection<T>): Later<List<T>> = scope.later {
+        list.map {
+            it.deleted = true
+            edit(it).await()
+        }
     }
 
-    override suspend fun delete(t: T): T = delete(listOf(t)).first()
+    override fun delete(t: T) = scope.later { delete(listOf(t)).await().first() }
 
-    override suspend fun wipe(list: Collection<T>) = list.map { wipe(it) }
+    override fun wipe(list: Collection<T>) = scope.later { list.map { wipe(it).await() } }
 
-    override suspend fun wipe(t: T) = withContext(Dispatchers.IO) {
+    override fun wipe(t: T) = scope.later {
         collection.deleteOne(eq("uid", t.uid))
         t
     }
 
-    override suspend fun load(uids: Collection<String>) = uids.mapNotNull { load(it.toString()) }
+    override fun load(uids: Collection<String>) = scope.later { uids.mapNotNull { load(it).await() } }
 
-    override suspend fun load(uid: String) = withContext(Dispatchers.IO) {
+    override fun load(uid: String) = scope.later {
         val doc = collection.find(eq("uid", uid)).first()
         doc?.to(serializer)
     }
 
-    override suspend fun page(no: Int, size: Int): List<T> {
+    override fun page(no: Int, size: Int) = scope.later {
         require(no > 0) { "Page numbering starts from one" }
         val filters = eq("deleted", false)
         val sorts = Sorts.ascending("uid")
         val skips = (no - 1) * size
-        return collection.find(filters).sort(sorts).skip(skips).limit(size).mapNotNull { it.to(serializer) }
+        collection.find(filters).sort(sorts).skip(skips).limit(size).mapNotNull { it.to(serializer) }
     }
 
-    override suspend fun all() = withContext(Dispatchers.IO) {
+    override fun all() = scope.later {
         val doc = collection.find(eq("deleted", false))
         doc.mapNotNull { it.to(serializer) }
     }
 
-    override suspend fun allDeleted() = withContext(Dispatchers.IO) {
+    override fun allDeleted() = scope.later {
         val doc = collection.find(eq("deleted", true))
         doc.mapNotNull { it.to(serializer) }
     }

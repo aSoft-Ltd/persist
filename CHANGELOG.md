@@ -1,4 +1,8 @@
-# 0.0.2 : 2020.12.16
+# 0.1.10 : 2012.12.30
+- Added later support
+- Changed versioning schemes
+
+# 0.1.0 : 2020.12.16
 ## New Features
 - Added `GenericPagingSource<T>` to `persist-core`
 

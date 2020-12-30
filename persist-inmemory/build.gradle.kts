@@ -17,13 +17,12 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":persist-core"))
-                api(asoft("paging-core", vers.asoft.paging))
             }
         }
     }
 }
 
-aSoftLibrary(
+aSoftOSSLibrary(
     version = vers.asoft.persist,
     description = "Platform agnostic contracts for persisting data in memomry"
 )
