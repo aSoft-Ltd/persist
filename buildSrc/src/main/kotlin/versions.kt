@@ -5,10 +5,10 @@ object vers {
     val mongo = "3.12.7"
 
     object asoft {
-        val test = "1.0.1"
-        val builders = "1.1.1"
-        val persist = "0.1.0"
-        val paging = "0.0.1"
+        val test = "1.1.10"
+        val builders = "1.2.0"
+        val persist = "0.1.10"
+        val paging = "0.0.30"
     }
 
     object kotlinx {

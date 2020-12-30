@@ -27,20 +27,20 @@ open class UniqueNameMongoDao<T : NamedEntity>(
         collection: String
     ) : this(db, serializer, collection)
 
-    override suspend fun create(t: T): T {
+    override fun create(t: T) = scope.later {
         if (!collection.find(eq("name", t.name)).none()) {
             throw Exception("Entity with name: ${t.name} already exist in the database")
         }
-        return super.create(t)
+        super.create(t).await()
     }
 
-    override suspend fun edit(t: T): T {
+    override fun edit(t: T) = scope.later {
         val found = collection.find(eq("name", t.name)).any {
             it.getString("name") == t.name && it.getString("uid") != t.uid
         }
 
         if (found) throw Exception("Entity with name: ${t.name} already exist in the database")
 
-        return super.edit(t)
+        super.edit(t).await()
     }
 }

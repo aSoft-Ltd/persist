@@ -1,30 +1,32 @@
 package tz.co.asoft
 
+import kotlinx.coroutines.CoroutineScope
+
 interface IDao<E : Entity> {
+    val scope: CoroutineScope
+    fun create(list: Collection<E>): Later<List<E>>
 
-    suspend fun create(list: Collection<E>): List<E>
+    fun create(t: E): Later<E>
 
-    suspend fun create(t: E): E
+    fun edit(list: Collection<E>): Later<List<E>>
 
-    suspend fun edit(list: Collection<E>): List<E>
+    fun edit(t: E): Later<E>
 
-    suspend fun edit(t: E): E
+    fun delete(list: Collection<E>): Later<List<E>>
 
-    suspend fun delete(list: Collection<E>): List<E>
+    fun delete(t: E): Later<E>
 
-    suspend fun delete(t: E): E
+    fun wipe(list: Collection<E>): Later<List<E>>
 
-    suspend fun wipe(list: Collection<E>): List<E>
+    fun wipe(t: E): Later<E>
 
-    suspend fun wipe(t: E): E
+    fun load(uids: Collection<String>): Later<List<E>>
 
-    suspend fun load(uids: Collection<String>): List<E>
+    fun load(uid: String): Later<E?>
 
-    suspend fun load(uid: String): E?
+    fun page(no: Int, size: Int): Later<List<E>>
 
-    suspend fun page(no: Int, size: Int): List<E>
+    fun all(): Later<List<E>>
 
-    suspend fun all(): List<E>
-
-    suspend fun allDeleted(): List<E>
+    fun allDeleted(): Later<List<E>>
 }

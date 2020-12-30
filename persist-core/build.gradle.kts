@@ -23,13 +23,13 @@ kotlin {
 
         val commonTest by getting {
             dependencies {
-                api(asoft("test", vers.asoft.test))
+                api(asoft("test-core", vers.asoft.test))
             }
         }
     }
 }
 
-aSoftLibrary(
+aSoftOSSLibrary(
     version = vers.asoft.persist,
     description = "Platform agnostic contracts for persisting data"
 )

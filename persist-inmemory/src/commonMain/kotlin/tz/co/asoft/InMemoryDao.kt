@@ -1,42 +1,45 @@
 package tz.co.asoft
 
-open class InMemoryDao<T : Entity>(private val prefix: String) : IDao<T> {
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 
+open class InMemoryDao<T : Entity>(private val prefix: String) : IDao<T> {
+    override val scope = CoroutineScope(SupervisorJob())
     internal val data = mutableMapOf<String?, T>()
 
-    override suspend fun all() = data.values.filterNot { it.deleted }
+    override fun all() = scope.later { data.values.filterNot { it.deleted } }
 
-    override suspend fun allDeleted() = data.values.filter { it.deleted }
+    override fun allDeleted() = scope.later { data.values.filter { it.deleted } }
 
-    override suspend fun create(t: T): T {
+    override fun create(t: T) = scope.later {
         val id = t.uid ?: prefix + "-" + data.size
         data[id] = t.apply { uid = id }
-        return t
+        t
     }
 
-    override suspend fun create(list: Collection<T>) = list.map { create(it) }
+    override fun create(list: Collection<T>) = scope.later { list.map { create(it).await() } }
 
-    override suspend fun delete(t: T): T = edit(t.apply { deleted = true })
+    override fun delete(t: T) = scope.later { edit(t.apply { deleted = true }).await() }
 
-    override suspend fun delete(list: Collection<T>) = list.map { delete(it) }
+    override fun delete(list: Collection<T>) = scope.later { list.map { delete(it).await() } }
 
-    override suspend fun edit(t: T): T {
+    override fun edit(t: T) = scope.later {
         data[t.uid] = t
-        return t
+        t
     }
 
-    override suspend fun edit(list: Collection<T>) = list.map { edit(it) }
+    override fun edit(list: Collection<T>) = scope.later { list.map { edit(it).await() } }
 
-    override suspend fun load(uid: String): T? = data[uid]
+    override fun load(uid: String) = scope.later { data[uid] }
 
-    override suspend fun load(uids: Collection<String>) = uids.mapNotNull { load(it) }
+    override fun load(uids: Collection<String>) = scope.later { uids.mapNotNull { load(it).await() } }
 
-    override suspend fun page(no: Int, size: Int): List<T> = data.values.chunked(size).getOrNull(no - 1) ?: listOf()
+    override fun page(no: Int, size: Int) = scope.later { data.values.chunked(size).getOrNull(no - 1) ?: listOf() }
 
-    override suspend fun wipe(t: T): T {
+    override fun wipe(t: T) = scope.later {
         data.remove(t.uid)
-        return t
+        t
     }
 
-    override suspend fun wipe(list: Collection<T>) = list.map { wipe(it) }
+    override fun wipe(list: Collection<T>) = scope.later { list.map { wipe(it).await() } }
 }
