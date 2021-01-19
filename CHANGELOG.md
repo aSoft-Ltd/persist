@@ -1,3 +1,6 @@
+# 0.2.10 : 2021.01.19
+- Published persist-client artifacts
+
 # 0.2.0 : 2021.01.19
 - Upgraded gradle from 6.7.1 to 6.8
 - Added token to dao(s) and repository
