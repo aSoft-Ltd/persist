@@ -32,6 +32,9 @@ jobs:
       - name: publishing persit-core
         run: ./gradlew :persist-core:publish
         working-directory: .
+      - name: publishing persit-client
+        run: ./gradlew :persist-client:publish
+        working-directory: .
       - name: publishing persit-inmemory
         run: ./gradlew :persist-inmemory:publish
         working-directory: .
