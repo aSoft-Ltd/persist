@@ -3,7 +3,7 @@
 - Added token to dao(s) and repository
 - Provided android implementations through jvm artifacts
 - Added the persist-client artifact
-- Added persist-keyvalue artifacts
+- Replaced persist-local with persist-keyvalue artifacts
 - Removed atomic dependency
 - Added kotlinx-serialization-mapper version 0.0.5
 

@@ -30,7 +30,7 @@ kotlin {
 
         val jvmTest by getting {
             dependencies {
-                api(asoft("test", vers.asoft.test))
+                api(asoft("expect-core", vers.asoft.expect))
             }
         }
     }

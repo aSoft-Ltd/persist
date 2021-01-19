@@ -19,6 +19,7 @@ open class MongoDao<T : Entity>(
     collection: String
 ) : IMongoDao<T> {
 
+    override var token: String? = null
     override val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     constructor(
