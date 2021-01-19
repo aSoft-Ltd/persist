@@ -35,8 +35,14 @@ jobs:
       - name: publishing persit-inmemory
         run: ./gradlew :persist-inmemory:publish
         working-directory: .
-      - name: publishing persist-local
-        run: ./gradlew :persist-local:publish
+      - name: publishing persist-keyvalue-core
+        run: ./gradlew :persist-keyvalue-core:publish
+        working-directory: .
+      - name: publishing persist-keyvalue-inmemory
+        run: ./gradlew :persist-keyvalue-inmemory:publish
+        working-directory: .
+      - name: publishing persist-keyvalue-locally
+        run: ./gradlew :persist-keyvalue-locally:publish
         working-directory: .
       - name: publishing persist-mongo
         run: ./gradlew :persist-mongo:publish

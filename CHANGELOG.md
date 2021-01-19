@@ -1,4 +1,13 @@
-# 0.1.10 : 2012.12.30
+# 0.2.0 : 2021.01.19
+- Upgraded gradle from 6.7.1 to 6.8
+- Added token to dao(s) and repository
+- Provided android implementations through jvm artifacts
+- Added the persist-client artifact
+- Replaced persist-local with persist-keyvalue artifacts
+- Removed atomic dependency
+- Added kotlinx-serialization-mapper version 0.0.5
+
+# 0.1.10 : 2020.12.30
 - Added later support
 - Changed versioning schemes
 
