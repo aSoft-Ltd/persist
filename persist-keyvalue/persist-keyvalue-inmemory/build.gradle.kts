@@ -10,13 +10,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(asoft("paging-core", vers.asoft.paging))
-            }
-        }
-
-        val commonTest by getting {
-            dependencies {
-                api(asoft("test-core", vers.asoft.test))
+                api(project(":persist-keyvalue-core"))
             }
         }
     }
@@ -24,5 +18,5 @@ kotlin {
 
 aSoftOSSLibrary(
     version = vers.asoft.persist,
-    description = "Platform agnostic contracts for persisting data"
+    description = "Platform agnostic contracts for persisting key-value pairs in memory"
 )

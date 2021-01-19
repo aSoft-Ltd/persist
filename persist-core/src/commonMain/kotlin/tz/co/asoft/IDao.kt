@@ -4,6 +4,8 @@ import kotlinx.coroutines.CoroutineScope
 
 interface IDao<E : Entity> {
     val scope: CoroutineScope
+    var token: String?
+    
     fun create(list: Collection<E>): Later<List<E>>
 
     fun create(t: E): Later<E>

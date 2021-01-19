@@ -1,6 +1,6 @@
 package tz.co.asoft
 
-open class UniqueNameInMemoryDao<T : NamedEntity>(prefix: String) : InMemoryDao<T>(prefix) {
+open class UniqueNameInMemoryDao<T : NamedEntity>(prefix: String, token: String? = null) : InMemoryDao<T>(prefix, token) {
     override fun create(t: T) = scope.later {
         if (all().await().any { it.name == t.name }) {
             throw Exception("Entity with name ${t.name} already exists")
