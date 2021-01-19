@@ -3,7 +3,7 @@ package tz.co.asoft
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 
-open class InMemoryDao<T : Entity>(private val prefix: String) : IDao<T> {
+open class InMemoryDao<T : Entity>(private val prefix: String, override var token: String? = null) : IDao<T> {
     override val scope = CoroutineScope(SupervisorJob())
     internal val data = mutableMapOf<String?, T>()
 

@@ -10,7 +10,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(asoft("paging-core", vers.asoft.paging))
+                api(project(":persist-core"))
             }
         }
 
